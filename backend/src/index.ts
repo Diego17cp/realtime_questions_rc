@@ -1,8 +1,10 @@
 import express from "express"
 import cors from "cors"
 import helmet from "helmet"
-import "dotenv/config"
+import dotenv from "dotenv"
 import http from "http"
+
+dotenv.config()
 
 const app = express()
 const server = http.createServer(app)
