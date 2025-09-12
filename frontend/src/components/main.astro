@@ -1,0 +1,295 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b border-gray-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <h1 class="text-2xl font-bold text-gray-900 animate-fade-in">
+                    Municipalidad JLO
+                </h1>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!--  grid -->
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4 lg:gap-8">
+                
+                <!-- banner -->
+                <section class="md:col-span-3 bg-white rounded-2xl shadow-xl p-4 md:p-8 transform hover:scale-105 transition-all duration-300 animate-slide-in-left">
+                    <div class="text-center">
+                        <!-- Imagen Banner -->
+						
+                        
+                        <!-- contenido debajo del banner -->
+                        <div class="mb-4 md:mb-6">
+                            <div class="w-24 h-24 md:w-32 md:h-32 mx-auto bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center shadow-2xl animate-bounce-slow">
+                                <svg class="w-12 h-12 md:w-16 md:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4 animate-fade-in-up">
+                            ¡Haz tu Pregunta!
+                        </h2>
+                        <p class="text-gray-600 text-sm md:text-lg leading-relaxed animate-fade-in-up animation-delay-200">
+                            Participa en la rendición de cuentas municipal. Tu voz es importante para construir una ciudad más transparente y participativa.
+                        </p>
+                        <div class="mt-4 md:mt-6">
+                            <span class="inline-flex items-center px-3 py-2 md:px-4 bg-green-100 text-green-800 rounded-full text-xs md:text-sm font-medium animate-pulse">
+                                En tiempo real
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- formulario -->
+                <section class="md:col-span-2 bg-white rounded-2xl shadow-xl p-4 md:p-6 animate-slide-in-right">
+                    <form class="space-y-4 md:space-y-5" id="questionForm">
+                        
+                        <!-- select de Eje -->
+                        <div class="animate-fade-in-up">
+                            <label for="eje" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Selecciona el Eje:
+                            </label>
+                            <select 
+                                id="eje" 
+                                name="eje" 
+                                class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 hover:border-gray-300 text-sm"
+                                required
+                            >
+                                <option value="">Elige una opción...</option>
+                                <option value="desarrollo-social">Desarrollo Social</option>
+                                <option value="infraestructura">Infraestructura</option>
+                                <option value="medio-ambiente">Medio Ambiente</option>
+                                <option value="seguridad">Seguridad Ciudadana</option>
+                                <option value="economia">Desarrollo Económico</option>
+                                <option value="educacion">Educación</option>
+                                <option value="salud">Salud</option>
+                            </select>
+                        </div>
+
+                        <!-- input de Pregunta -->
+                        <div class="animate-fade-in-up animation-delay-100">
+                            <label for="pregunta" class="block text-sm font-semibold text-gray-700 mb-2">
+                                Escribe tu pregunta:
+                            </label>
+                            <textarea 
+                                id="pregunta" 
+                                name="pregunta" 
+                                rows="5" 
+                                placeholder="¿Cuál es tu pregunta sobre la gestión municipal?"
+                                class="w-full px-3 py-2 border-2 border-gray-200 rounded-xl resize-none focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 hover:border-gray-300 text-sm"
+                                required
+                            ></textarea>
+                            <div class="mt-2 text-xs text-gray-500">
+                                <span id="charCount">0</span>/500 caracteres
+                            </div>
+                        </div>
+
+                        <!-- boton  de envio -->
+                        <div class="animate-fade-in-up animation-delay-200">
+                            <button 
+                                type="submit" 
+                                class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-3 px-4 rounded-xl hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 active:scale-95 transition-all duration-300 shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-blue-300 text-sm"
+                            >
+                                <span class="flex items-center justify-center gap-2">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+                                    </svg>
+                                    Enviar Pregunta
+                                </span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Mensaje de confirmación -->
+                    <div id="successMessage" class="hidden mt-4 p-3 bg-green-50 border-2 border-green-200 rounded-xl animate-fade-in">
+                        <div class="flex items-center gap-2">
+                            <div class="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
+                                <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-green-800 text-sm">¡Pregunta enviada!</h3>
+                                <p class="text-green-700 text-xs">Será respondida en la sesión.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-800 text-white py-6 md:py-8 mt-8 md:mt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center">
+                    <h3 class="text-base md:text-lg font-semibold mb-2">Municipalidad</h3>
+                    <p class="text-gray-400 text-sm md:text-base">Transparencia y participación ciudadana en tiempo real</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Contador de caracteres
+        const textarea = document.getElementById('pregunta');
+        const charCount = document.getElementById('charCount');
+        const maxChars = 500;
+
+        textarea?.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            charCount.textContent = currentLength;
+            
+            if (currentLength > maxChars) {
+                this.value = this.value.substring(0, maxChars);
+                charCount.textContent = maxChars;
+            }
+            
+			//cambia color dependiendo la camtidad de caracteres
+            if (currentLength > maxChars * 0.9) {
+                charCount.classList.add('text-red-500');
+            } else if (currentLength > maxChars * 0.7) {
+                charCount.classList.add('text-yellow-500');
+                charCount.classList.remove('text-red-500');
+            } else {
+                charCount.classList.remove('text-red-500', 'text-yellow-500');
+            }
+        });
+
+		// envio del formulario
+        const form = document.getElementById('questionForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // simular
+            const button = this.querySelector('button[type="submit"]');
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = `
+                <span class="flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                    </svg>
+                    Enviando...
+                </span>
+            `;
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.disabled = false;
+                form.reset();
+                charCount.textContent = '0';
+                successMessage.classList.remove('hidden');
+                
+                // ocultar mensaje después de 5 segundos
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 5000);
+            }, 2000);
+        });
+
+        // Animaciones de entrada - ECAS CON CLAUDE uwu
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('[class*="animate-"]').forEach(el => {
+            observer.observe(el);
+        });
+    </script>
+
+    <style>
+        @keyframes fade-in {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slide-in-left {
+            from { 
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes slide-in-right {
+            from { 
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes fade-in-up {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce-slow {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .animate-fade-in {
+            animation: fade-in 0.6s ease-out;
+        }
+
+        .animate-slide-in-left {
+            animation: slide-in-left 0.8s ease-out;
+        }
+
+        .animate-slide-in-right {
+            animation: slide-in-right 0.8s ease-out;
+        }
+
+        .animate-fade-in-up {
+            animation: fade-in-up 0.6s ease-out;
+        }
+
+        .animate-bounce-slow {
+            animation: bounce-slow 3s ease-in-out infinite;
+        }
+
+        .animation-delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .animation-delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        /* Efectos hover adicionales */
+        .hover-glow:hover {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+        }
+    </style>
+</Layout>
