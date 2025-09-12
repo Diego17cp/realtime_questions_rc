@@ -1,0 +1,6 @@
+# Ignorar archivos "lock" generados por gestores de dependencias
+package-lock.json
+npm-shrinkwrap.json
+yarn.lock
+pnpm-lock.yaml
+
