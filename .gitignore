@@ -4,3 +4,5 @@ npm-shrinkwrap.json
 yarn.lock
 pnpm-lock.yaml
 
+.env
+*/.env
