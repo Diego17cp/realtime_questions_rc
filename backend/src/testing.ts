@@ -101,6 +101,18 @@ app.get("/test/preguntas", async (_, res) => {
         res.status(500).json({ error: "Error obteniendo preguntas" })
     }
 })
+app.get("/test/ejes", async (_, res) => {
+    try {
+        const ejes = await Eje.find().sort({ nombre: 1 })
+        res.json({
+            total: ejes.length,
+            ejes
+        })
+    } catch (error) {
+        console.error("Error obteniendo ejes:", error)
+        res.status(500).json({ error: "Error obteniendo ejes" })
+    }
+})
 
 // Ruta para probar cambio de estado
 app.patch("/test/pregunta/:id/estado/:nuevoEstado", async (req, res) => {
