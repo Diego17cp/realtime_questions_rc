@@ -73,4 +73,20 @@ preguntaSchema.methods = {
     }
 }
 
+preguntaSchema.set("toJSON", {
+    virtuals: true,
+    transform: (_, obj: any) => {
+        if (obj._id) {
+            obj.id = obj._id.toString();
+            delete obj._id;
+        }        
+        if (obj.eje && obj.eje._id) {
+            obj.eje.id = obj.eje._id.toString();
+            delete obj.eje._id;
+        }
+        delete obj.__v;
+        return obj;
+    }
+});
+
 export const Pregunta = model<IPreguntaDocument, IPreguntaModel>("Pregunta", preguntaSchema);
