@@ -38,6 +38,14 @@ export class DatabaseConnection {
 	public getConnection(): mongoose.Connection {
 		return mongoose.connection;
 	}
+	public getStatus() {
+		const conn = mongoose.connection
+		return {
+			readyState: conn.readyState,
+			host: conn.host,
+			name: conn.name,
+		}
+	}
 	private setupConnectionEvents(): void {
 		mongoose.connection.on("error", (err) => {
 			console.error("MongoDB connection error:", err);
