@@ -1,0 +1,84 @@
+---
+import { FaInstagram, FaFacebookF, FaTiktok } from "react-icons/fa";
+import type { IconType } from "react-icons/lib";
+type SocialPlatform = "instagram" | "facebook" | "tiktok";
+const { platform, href } = Astro.props;
+const config: Record<
+	SocialPlatform,
+	{ icon: IconType; type: string; gradient?: string }
+> = {
+	instagram: {
+		icon: FaInstagram,
+		type: "gradient",
+		gradient:
+			"bg-gradient-to-bl from-purple-700 via-pink-600 to-yellow-500",
+	},
+	facebook: {
+		icon: FaFacebookF,
+		type: "solid",
+	},
+	tiktok: {
+		icon: FaTiktok,
+		type: "special",
+	},
+};
+const { icon: Icon, type, gradient } = config[platform as SocialPlatform];
+const baseClasses =
+	"size-10 rounded-full text-white relative overflow-hidden flex items-center justify-center group transition-all duration-300";
+---
+
+<li>
+	{
+		type === "solid" && (
+			<a
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				class={`${baseClasses} bg-gray-700 hover:bg-primary `}
+				aria-label={`${platform} link`}
+			>
+				<span class="text-xl"><Icon /></span>
+			</a>
+		)
+	}
+	{
+		type === "gradient" && (
+			<a
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				class={baseClasses}
+				aria-label={`${platform} link`}
+			>
+				<span class="absolute inset-0 bg-gray-700 z-0" />
+				<span
+					class={`absolute inset-0 ${gradient} opacity-0 group-hover:opacity-100 transition-all duration-300 z-10`}
+				/>
+				<span class="text-xl relative z-20"><Icon /></span>
+			</a>
+		)
+	}
+	{
+		type === "special" && (
+			<a
+				href={href}
+				target="_blank"
+				rel="noopener noreferrer"
+				class={`${baseClasses} bg-gray-700`}
+				aria-label={`${platform} link`}
+			>
+				<span class="absolute inset-0 bg-gray-700 z-0" />
+				<span
+					class="absolute h-full w-full rounded-full opacity-0 group-hover:opacity-100 transition-all duration-300 z-20"
+					style={{
+						background:
+							"linear-gradient(135deg, #00f2ea 0%, #ff0050 100%)",
+					}}
+				/>
+				<span class="text-xl relative z-30 mix-blend-screen">
+					<Icon />
+				</span>
+			</a>
+		)
+	}
+</li>
