@@ -1,8 +1,9 @@
-import { toast, Toaster } from "sonner";
+import { Toaster } from "sonner";
 import { useForm } from "../../hooks/useForm";
 import { useEffect } from "react";
 import { GrSend } from "react-icons/gr";
 import { Loader } from "dialca-ui";
+import { motion } from "motion/react";
 
 export const Form = () => {
 	const {
@@ -18,19 +19,31 @@ export const Form = () => {
 		fetchEjes();
 	}, []);
 	return (
-		<section className="md:col-span-2 bg-white rounded-2xl shadow-xl p-4 md:p-6 animate-slide-in-right">
+		<motion.section
+			initial={{ opacity: 0, x: 50 }}
+			animate={{ opacity: 1, x: 0 }}
+			className="md:col-span-2 bg-white rounded-2xl shadow-xl p-4 md:p-6"
+		>
 			<form className="space-y-4 md:space-y-5" onSubmit={handleSubmit}>
-				<div className="animate-fade-in-up">
-					<label className="block text-sm font-semibold text-gray-700 mb-2">
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+				>
+					<label
+						htmlFor="eje"
+						className="block text-sm font-semibold text-gray-700 mb-2"
+					>
 						Selecciona el Eje:
 					</label>
 					<select
+						id="eje"
 						value={formData.eje.id}
 						className="w-full px-3 py-2 border-2 border-gray-200 rounded-xl focus:border-secondary focus:ring-4 focus:ring-secondary/60 focus:outline-none cursor-pointer transition-all duration-300 hover:border-gray-300 text-sm"
 						onChange={(e) =>
 							handleEjeChange({
 								id: e.target.value,
-								nombre: e.target.options[e.target.selectedIndex].text,
+								nombre: e.target.options[e.target.selectedIndex]
+									.text,
 							})
 						}
 						required
@@ -42,9 +55,13 @@ export const Form = () => {
 							</option>
 						))}
 					</select>
-				</div>
+				</motion.div>
 
-				<div className="animate-fade-in-up animation-delay-100">
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ delay: 0.1 }}
+				>
 					<label
 						htmlFor="pregunta"
 						className="block text-sm font-semibold text-gray-700 mb-2"
@@ -52,6 +69,7 @@ export const Form = () => {
 						Escribe tu pregunta:
 					</label>
 					<textarea
+						id="pregunta"
 						value={formData.texto}
 						onChange={handleTextChange}
 						maxLength={500}
@@ -74,8 +92,12 @@ export const Form = () => {
 						</span>
 						/500 caracteres
 					</div>
-				</div>
-				<div className="animate-fade-in-up animation-delay-200">
+				</motion.div>
+				<motion.div
+					initial={{ opacity: 0, y: 20 }}
+					animate={{ opacity: 1, y: 0 }}
+					transition={{ delay: 0.2 }}
+				>
 					<button
 						type="submit"
 						disabled={isSubmitting}
@@ -100,10 +122,10 @@ export const Form = () => {
 							)}
 						</div>
 					</button>
-				</div>
+				</motion.div>
 			</form>
 
 			<Toaster richColors closeButton />
-		</section>
+		</motion.section>
 	);
 };
