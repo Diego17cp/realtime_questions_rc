@@ -1,0 +1,114 @@
+---
+import logo from "../assets/white-logo.png";
+import SocialItem from "./SocialItem.astro";
+---
+
+<footer class="bg-secondary py-8 flex flex-col items-center justify-center">
+	<div class="w-full max-w-6xl xl:max-w-7xl! px-4">
+		<div
+			class="w-full flex flex-col md:flex-row! items-center justify-between py-4"
+		>
+			<a
+				href="https://portal.munijlo.gob.pe/"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<img
+					src={logo?.src ?? logo}
+					alt="Logo de Muni JDLO"
+					class="h-16 mb-4 md:mb-0!"
+				/>
+			</a>
+			<div class="rounded-md p-2 mt-6 md:mt-0!">
+				<ul class="flex items-center gap-4">
+					<SocialItem
+						platform="instagram"
+						href="https://www.instagram.com/municipalidadjoseleonardoortiz"
+					/>
+					<SocialItem
+						platform="facebook"
+						href="https://www.facebook.com/munijlo"
+					/>
+					<SocialItem
+						platform="tiktok"
+						href="https://www.tiktok.com/@muni.jlo"
+					/>
+				</ul>
+			</div>
+		</div>
+		<!-- <div
+			class="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 p-6 rounded-md"
+		>
+			<FooterItem
+				title="Distrito"
+				icon="fa-map-location-dot"
+				links={districtLinks}
+			/>
+			<FooterItem
+				title="Documentos"
+				icon="fa-file-lines"
+				links={documentLinks}
+			/>
+			<FooterItem
+				title="Convocatorias"
+				icon="fa-bullhorn"
+				links={convocatoryLinks}
+			/>
+			{/* Contacto */}
+			<div className="footer-links-block">
+				<h3
+					className="text-white text-lg font-bold mb-4 pb-2 border-b border-primary/30"
+				>
+					<i className="fa-solid fa-address-book mr-2 text-primary"
+					></i>
+					Contacto
+				</h3>
+				<ul className="space-y-3">
+					<li>
+						<Link
+							to="tel:+51987654321"
+							className="text-white/70 hover:text-primary flex items-center transition-all duration-300 ease-in-out"
+						>
+							<i
+								className="fa-solid fa-phone text-xs mr-2 text-primary/70"
+							></i>
+							Teléfono: 123-456-789
+						</Link>
+					</li>
+					<li>
+						<Link
+							to="mailto:muni@gmail.com"
+							className="text-white/70 hover:text-primary flex items-center transition-all duration-300 ease-in-out"
+						>
+							<i
+								className="fa-solid fa-envelope text-xs mr-2 text-primary/70"
+							></i>
+							Email: contacto@munijlo.gob.pe
+						</Link>
+					</li>
+					<li>
+						<Link
+							to="https://maps.app.goo.gl/6Twfpi9PNNGtoJHj6"
+							className="text-white/70 hover:text-primary flex items-center transition-all duration-300 ease-in-out"
+						>
+							<i
+								className="fa-solid fa-location-dot text-xs mr-2 text-primary/70"
+							></i>
+							Av. José Leonardo Ortiz 123
+						</Link>
+					</li>
+				</ul>
+			</div>
+		</div> -->
+		<div class="w-full border-t border-white/20 mt-4 pt-4 text-center">
+			<p class="text-white text-sm">
+				&copy; {new Date().getFullYear()} Municipalidad de José Leonardo
+				Ortiz. Todos los derechos reservados.
+			</p>
+			<p class="text-white/70 text-xs mt-1">
+				Subgerencia de Tecnologías de la Información y Procesos
+				Informáticos
+			</p>
+		</div>
+	</div>
+</footer>
