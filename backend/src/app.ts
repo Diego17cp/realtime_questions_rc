@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import { errorHandler } from "./middleware/errorHandler";
 import { DatabaseConnection } from "./config/database";
+import { EjeService } from "./services/eje.service";
 
 const app: Application = express();
 
@@ -28,6 +29,21 @@ app.get("/", (_, res) => {
 		timestamp: new Date().toISOString(),
 	});
 });
+// API for list of ejes
+app.get("/api/ejes", async (_, res) => {
+	try {
+		const ejes = await EjeService.findAll();
+		res.json({
+			success: true,
+			data: ejes,
+		})
+	} catch (error) {
+		res.status(500).json({
+			success: false,
+			message: "Error al obtener los ejes",
+		})
+	}
+})
 
 // API status
 app.get("/api/status", (_, res) => {
