@@ -23,6 +23,7 @@ export const useForm = () => {
     })
     const [error, setError] = useState<Record<string, string>>({})
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const [formEnabled, setFormEnabled] = useState<boolean>(true)
 
     useEffect(() => {
         if (!socket.current) {
@@ -31,6 +32,12 @@ export const useForm = () => {
             socket.current.on("server:error", (data: { message: string }) => {
                 toast.error("Error", { description: data.message || "Inténtalo de nuevo más tarde." })
                 setIsSubmitting(false);
+            })
+            socket.current.on("server:formStatusChanged", (enabled: boolean) => {
+                setFormEnabled(enabled)
+            })
+            socket.current.on("connect", () => {
+                socket.current?.emit("client:getFormStatus")
             })
         }
         return () => {
@@ -118,6 +125,7 @@ export const useForm = () => {
         fetchEjes,
         error,
         isSubmitting,
-        handleSubmit
+        handleSubmit,
+        formEnabled
     }
 }
