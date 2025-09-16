@@ -5,6 +5,8 @@ import { GrSend } from "react-icons/gr";
 import { Loader } from "dialca-ui";
 import { motion } from "motion/react";
 
+import "dialca-ui/styles";
+
 export const Form = () => {
 	const {
 		formData,
