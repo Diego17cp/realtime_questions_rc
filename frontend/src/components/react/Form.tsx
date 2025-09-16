@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { GrSend } from "react-icons/gr";
 import { Loader } from "dialca-ui";
 import { motion } from "motion/react";
+import { TbFaceIdError } from "react-icons/tb";
 
 import "dialca-ui/styles";
 
@@ -16,6 +17,7 @@ export const Form = () => {
 		fetchEjes,
 		isSubmitting,
 		handleSubmit,
+		formEnabled,
 	} = useForm();
 	useEffect(() => {
 		fetchEjes();
@@ -102,7 +104,7 @@ export const Form = () => {
 				>
 					<button
 						type="submit"
-						disabled={isSubmitting}
+						disabled={isSubmitting || !formEnabled}
 						className="group w-full cursor-pointer relative overflow-hidden rounded-xl shadow-lg hover:shadow-xl focus:outline-none focus:ring-4 focus:ring-primary/30 transition-all duration-300 disabled:opacity-70 disabled:cursor-not-allowed disabled:transform-none"
 					>
 						<div className="absolute inset-0 bg-gradient-to-r from-secondary to-primary"></div>
@@ -118,8 +120,19 @@ export const Form = () => {
 								/>
 							) : (
 								<>
-									<span>Enviar Pregunta</span>
-									<GrSend size={20} />
+									{formEnabled ? (
+										<>
+											<span>Enviar Pregunta</span>
+											<GrSend size={20} />
+										</>
+									) : (
+										<>
+											<span>
+												Formulario Deshabilitado
+											</span>
+											<TbFaceIdError size={20} />
+										</>
+									)}
 								</>
 							)}
 						</div>
