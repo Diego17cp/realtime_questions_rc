@@ -24,6 +24,7 @@ export const useForm = () => {
     const [error, setError] = useState<Record<string, string>>({})
     const [isSubmitting, setIsSubmitting] = useState(false)
     const [formEnabled, setFormEnabled] = useState<boolean>(true)
+    const initialLoadRef = useRef(true)
 
     useEffect(() => {
         if (!socket.current) {
@@ -35,6 +36,15 @@ export const useForm = () => {
             })
             socket.current.on("server:formStatusChanged", (enabled: boolean) => {
                 setFormEnabled(enabled)
+                if(!initialLoadRef.current) {
+                    if (!enabled) {
+                        toast.error("Formulario deshabilitado", { description: "No puedes enviar preguntas en este momento." })
+                    } else {
+                        toast.success("Formulario habilitado", { description: "Ya puedes enviar preguntas." })
+                    }
+                } else {
+                    initialLoadRef.current = false;
+                }
             })
             socket.current.on("connect", () => {
                 socket.current?.emit("client:getFormStatus")
@@ -45,6 +55,7 @@ export const useForm = () => {
                 socket.current.disconnect();
                 socket.current = null;
             }
+            initialLoadRef.current = true;
         }
     }, [])
 
