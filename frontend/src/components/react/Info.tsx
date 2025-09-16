@@ -27,7 +27,7 @@ export const Info = () => {
 				<motion.h2
 					initial={{ opacity: 0, y: 20 }}
 					animate={{ opacity: 1, y: 0 }}
-					className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4!"
+					className="text-2xl md:text-3xl font-bold text-gray-900 mb-3 md:mb-4! font-titles"
 				>
 					¡Haz tu Pregunta!
 				</motion.h2>
@@ -35,13 +35,13 @@ export const Info = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-					className="text-gray-600 px-5 md:px-15! text-sm md:text-lg! leading-relaxed">
+					className="text-gray-600 px-5 md:px-15! text-sm md:text-lg! leading-relaxed font-body">
 					Participa en la rendición de cuentas municipal. Tu voz es
 					importante para construir una ciudad más transparente y
 					participativa.
 				</motion.p>
 				<div className="mt-4 md:mt-6">
-					<span className="inline-flex items-center px-3 py-2 md:px-4! bg-primary/50 text-secondary rounded-full text-xs md:text-sm! font-medium animate-pulse">
+					<span className="inline-flex items-center px-3 py-2 md:px-4! bg-primary/50 text-secondary rounded-full text-xs md:text-sm! font-medium font-body animate-pulse">
 						En tiempo real
 					</span>
 				</div>
