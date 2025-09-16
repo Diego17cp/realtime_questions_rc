@@ -18,4 +18,13 @@ export class PreguntaService {
     static async getRandomAceptada() {
         return await Pregunta.getRandomAceptada();
     }
+    static async getStats() {
+        const [registradas, aceptadas, rechazadas, respondidas] = await Promise.all([
+            Pregunta.countDocuments({ estado: "registrada" }),
+            Pregunta.countDocuments({ estado: "aceptada" }),
+            Pregunta.countDocuments({ estado: "rechazada" }),
+            Pregunta.countDocuments({ estado: "respondida" }),
+        ])
+        return { nuevas: registradas, aceptadas, rechazadas, respondidas, total: registradas + aceptadas + rechazadas + respondidas };
+    }
 }
