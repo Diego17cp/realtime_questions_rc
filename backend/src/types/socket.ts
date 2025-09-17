@@ -1,4 +1,4 @@
-import { QuestionState } from "./database"
+import type { QuestionState } from "./database"
 
 export interface Stats {
     nuevas: number
@@ -30,4 +30,5 @@ export interface ClientToServerEvents {
     "client:joinRoom": (room: "users" | "moderators" | "presentation") => void
     "client:getFormStatus": () => void
     "client:getStats": () => void
+    "client:getPendingQuestions": () => void
 }
