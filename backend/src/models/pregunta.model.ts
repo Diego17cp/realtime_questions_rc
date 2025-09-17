@@ -78,11 +78,11 @@ preguntaSchema.set("toJSON", {
     transform: (_, obj: any) => {
         if (obj._id) {
             obj.id = obj._id.toString();
-            delete obj._id;
+            obj._id = obj._id.toString(); // ← Mantiene _id como string (opcional)
         }        
         if (obj.eje && obj.eje._id) {
             obj.eje.id = obj.eje._id.toString();
-            delete obj.eje._id;
+            obj.eje._id = obj.eje._id.toString(); // ← Mantiene _id como string (opcional)
         }
         delete obj.__v;
         return obj;
