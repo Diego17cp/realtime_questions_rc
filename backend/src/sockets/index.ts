@@ -8,13 +8,13 @@ type TypedSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 type TypedServer = Server<ClientToServerEvents, ServerToClientEvents>;
 
 const broadcastStats = async (io: TypedServer) => {
-    try {
-        const stats = await PreguntaService.getStats()
-        io.to("moderators").emit("server:statsUpdate", stats)
-    } catch (error) {
-        console.error("Error broadcasting stats:", error)
-    }
-}
+	try {
+		const stats = await PreguntaService.getStats();
+		io.to("moderators").emit("server:statsUpdate", stats);
+	} catch (error) {
+		console.error("Error broadcasting stats:", error);
+	}
+};
 
 const registerSocketHandlers = (io: TypedServer) => {
 	io.on("connection", (socket: TypedSocket) => {
@@ -28,29 +28,43 @@ const registerSocketHandlers = (io: TypedServer) => {
 					"server:formStatusChanged",
 					SystemService.getFormStatus()
 				);
-            if (room === "moderators") {
-                try {
-                    const stats = await PreguntaService.getStats()
-                    socket.emit("server:statsUpdate", stats)
-                    const pendingQuestions = await PreguntaService.findByEstado("registrada")
-                    socket.emit("server:pendingQuestions", pendingQuestions)
-                } catch (error) {
-                    console.error("Error fetching stats:", error)
-                }
-            }
+			if (room === "moderators") {
+				try {
+					const stats = await PreguntaService.getStats();
+					socket.emit("server:statsUpdate", stats);
+					const pendingQuestions = await PreguntaService.findByEstado(
+						"registrada"
+					);
+					socket.emit("server:pendingQuestions", pendingQuestions);
+				} catch (error) {
+					console.error("Error fetching stats:", error);
+				}
+			}
+			if (room === "presentation") {
+				try {
+					const acceptedQuestions = await PreguntaService.findByEstado("aceptada");
+					const answeredQuestions = await PreguntaService.findByEstado("respondida");
+					socket.emit("server:acceptedQuestions", acceptedQuestions);
+					socket.emit("server:answeredQuestions", answeredQuestions);
+				} catch (error) {
+					console.error("Error fetching questions:", error);
+				}
+			}
 		});
-        socket.on("client:getStats", async() => {
-            try {
-                const stats = await PreguntaService.getStats()
-                socket.emit("server:statsUpdate", stats)
-            } catch (error) {
-                console.error("Error fetching stats:", error)
-                socket.emit("server:error", { message: "Error al obtener estadísticas" })
-            }
-        })
-        socket.on("client:getFormStatus", () => {
-            socket.emit("server:formStatusChanged", SystemService.getFormStatus())
-        })
+		socket.on("client:getStats", async () => {
+			try {
+				const stats = await PreguntaService.getStats();
+				socket.emit("server:statsUpdate", stats);
+			} catch (error) {
+				console.error("Error fetching stats:", error);
+				socket.emit("server:error", {
+					message: "Error al obtener estadísticas",
+				});
+			}
+		});
+		socket.on("client:getFormStatus", () => {
+			socket.emit("server:formStatusChanged", SystemService.getFormStatus());
+		});
 		socket.on("client:submitQuestion", async ({ texto, ejeId }) => {
 			try {
 				if (!SystemService.getFormStatus()) {
@@ -71,7 +85,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 					nombre: eje.nombre,
 				});
 				io.to("moderators").emit("server:newQuestion", newQuestion);
-                await broadcastStats(io);
+				await broadcastStats(io);
 				console.log("Nueva pregunta recibida:", newQuestion);
 			} catch (error) {
 				console.error("Error al procesar la nueva pregunta:", error);
@@ -80,52 +94,79 @@ const registerSocketHandlers = (io: TypedServer) => {
 				});
 			}
 		});
-        // Moderators
-        socket.on("client:updateQuestionState", async ({ id, estado }) => {
-            try {
-                const updatedQuestion = await PreguntaService.updateEstado(id, estado);
-                if (!updatedQuestion) {
-                    socket.emit("server:error", { message: "Pregunta no encontrada." });
-                    return;
-                }
-                if (estado === "aceptada") {
-                    io.to("presentation").emit("server:questionAccepted", updatedQuestion);
-                }
-                await broadcastStats(io);
-                console.log("Pregunta actualizada:", updatedQuestion);
-            } catch (error) {
-                console.error("Error al actualizar la pregunta:", error);
-                socket.emit("server:error", { message: "Error al actualizar la pregunta." });
-            }
-        })
-        socket.on("client:toggleForm", () => {
-            try {
-                const newStatus = SystemService.toggleForm()
-                io.to("users").emit("server:formStatusChanged", newStatus)
-                io.to("moderators").emit("server:formStatusChanged", newStatus)
-                console.log(`Form ${newStatus ? "abled" : "disabled"}`)
-            } catch (error) {
-                console.error("Error toggling form status:", error)
-                socket.emit("server:error", { message: "Error al cambiar el estado del formulario" })
-            }
-        }) 
+		// Moderators
+		socket.on("client:updateQuestionState", async ({ id, estado }) => {
+			try {
+				const updatedQuestion = await PreguntaService.updateEstado(id, estado);
+				if (!updatedQuestion) {
+					socket.emit("server:error", {
+						message: "Pregunta no encontrada.",
+					});
+					return;
+				}
+				if (estado === "aceptada") {
+					io.to("presentation").emit("server:questionAccepted", updatedQuestion);
+				}
+				await broadcastStats(io);
+				console.log("Pregunta actualizada:", updatedQuestion);
+			} catch (error) {
+				console.error("Error al actualizar la pregunta:", error);
+				socket.emit("server:error", {
+					message: "Error al actualizar la pregunta.",
+				});
+			}
+		});
+		socket.on("client:toggleForm", () => {
+			try {
+				const newStatus = SystemService.toggleForm();
+				io.to("users").emit("server:formStatusChanged", newStatus);
+				io.to("moderators").emit("server:formStatusChanged", newStatus);
+				console.log(`Form ${newStatus ? "abled" : "disabled"}`);
+			} catch (error) {
+				console.error("Error toggling form status:", error);
+				socket.emit("server:error", {
+					message: "Error al cambiar el estado del formulario",
+				});
+			}
+		});
 
-        // Presentation
-        socket.on("client:selectRandomQuestion", async() => {
-            try {
-                const selectedQuestion = await PreguntaService.getRandomAceptada()
-                if (!selectedQuestion) {
-                    socket.emit("server:error", { message: "No hay preguntas aceptadas disponibles." })
-                    return
-                }
-                await PreguntaService.updateEstado(selectedQuestion._id!.toString(), "respondida")
-                io.to("presentation").emit("server:questionAnswered", selectedQuestion)
-                console.log("Pregunta aleatoria seleccionada:", selectedQuestion)
-            } catch (error) {
-                console.error("Error selecting random question:", error)
-                socket.emit("server:error", { message: "Error al seleccionar una pregunta aleatoria" })
-            }
-        })
+		// Presentation
+		socket.on("client:selectRandomQuestion", async () => {
+			try {
+				io.to("presentation").emit("server:selectingRandomQuestion", { loading: true });
+				const selectedQuestion = await PreguntaService.getRandomAceptada();
+				if (!selectedQuestion) {
+					io.to("presentation").emit("server:selectingRandomQuestion", { loading: false });
+					socket.emit("server:error", {
+						message: "No hay preguntas aceptadas disponibles.",
+					});
+					return;
+				}
+				const updatedQuestion = await PreguntaService.updateEstado(selectedQuestion._id!.toString(), "respondida");
+
+				if (!updatedQuestion) {
+					io.to("presentation").emit("server:selectingRandomQuestion", { loading: false });
+					socket.emit("server:error", {
+						message: "Error al actualizar la pregunta.",
+					});
+					return;
+				}
+				io.to("presentation").emit("server:questionAnswered", updatedQuestion);
+				io.to("presentation").emit("server:selectingRandomQuestion", {
+					loading: false,
+				});
+
+				await broadcastStats(io);
+			} catch (error) {
+				console.error("Error selecting random question:", error);
+				io.to("presentation").emit("server:selectingRandomQuestion", {
+					loading: false,
+				});
+				socket.emit("server:error", {
+					message: "Error al seleccionar una pregunta aleatoria",
+				});
+			}
+		});
 		socket.on("disconnect", () => {
 			console.log("Socket disconnected:", socket.id);
 		});

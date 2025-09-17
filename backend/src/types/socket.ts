@@ -16,6 +16,9 @@ export interface ServerToClientEvents {
     "server:questionAnswered": (question: any) => void
     "server:statsUpdate": (stats: Stats) => void
     "server:pendingQuestions": (questions: any[]) => void
+    "server:acceptedQuestions": (questions: any[]) => void
+    "server:answeredQuestions": (questions: any[]) => void
+    "server:selectingRandomQuestion": (data: { loading: boolean }) => void
     "server:error": (error: { message: string }) => void
 }
 export interface ClientToServerEvents {
