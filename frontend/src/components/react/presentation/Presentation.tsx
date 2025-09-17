@@ -2,6 +2,7 @@ import { LuRefreshCcw } from "react-icons/lu";
 import { usePresentation } from "../../../hooks/usePresentation";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
+import  confetti  from "canvas-confetti"
 import { AcceptedQuestion } from "./AcceptedQuestion";
 import { AnsweredQuestion } from "./AnsweredQuestion";
 import { EmptyAcceptedsPresentation } from "../empty/EmptyAcceptedsPresentation";
@@ -27,6 +28,7 @@ export const PresentationView = () => {
 
 	const handleRandomSelection = () => {
 		selectRandomQuestion();
+		confetti()
 	};
 
 	const handleCloseModal = () => {
