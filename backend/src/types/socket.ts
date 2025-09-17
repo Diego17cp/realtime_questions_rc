@@ -9,6 +9,7 @@ export interface Stats {
 }
 
 export interface ServerToClientEvents {
+    "server:initialFormStatus": (enabled: boolean) => void
     "server:formStatusChanged": (enabled: boolean) => void
     "server:newQuestion": (question: any) => void
     "server:questionAccepted": (question: any) => void

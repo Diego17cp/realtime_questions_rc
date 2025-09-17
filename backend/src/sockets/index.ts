@@ -28,7 +28,8 @@ const registerSocketHandlers = (io: TypedServer) => {
 			console.log(`Socket ${socket.id} joined room: ${room}`);
 
 			if (room === "users")
-				socket.emit("server:formStatusChanged", SystemService.getFormStatus());
+				socket.emit("server:initialFormStatus", SystemService.getFormStatus());
+				// socket.emit("server:formStatusChanged", SystemService.getFormStatus());
 			if (room === "moderators") {
 				try {
 					const stats = await PreguntaService.getStats();
@@ -82,7 +83,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 			}
 		});
 		socket.on("client:getFormStatus", () => {
-			socket.emit("server:formStatusChanged", SystemService.getFormStatus());
+			socket.emit("server:initialFormStatus", SystemService.getFormStatus());
 		});
 		socket.on("client:submitQuestion", async ({ texto, ejeId }) => {
 			try {
