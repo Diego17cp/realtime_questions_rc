@@ -12,6 +12,7 @@ export interface ServerToClientEvents {
     "server:formStatusChanged": (enabled: boolean) => void
     "server:newQuestion": (question: any) => void
     "server:questionAccepted": (question: any) => void
+    "server:questionUpdated": (question: any) => void
     "server:questionRejected": (question: any) => void
     "server:questionAnswered": (question: any) => void
     "server:statsUpdate": (stats: Stats) => void
