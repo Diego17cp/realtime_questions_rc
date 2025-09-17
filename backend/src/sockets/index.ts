@@ -104,6 +104,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 					});
 					return;
 				}
+                socket.emit("server:questionUpdated", updatedQuestion);
 				if (estado === "aceptada") {
 					io.to("presentation").emit("server:questionAccepted", updatedQuestion);
 				}
