@@ -8,15 +8,21 @@
     "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "db:generate": "prisma generate",
+    "db:push": "prisma db push",
+    "db:migrate": "prisma migrate dev",
+    "db:studio": "prisma studio",
+    "db:seed": "ts-node src/scripts/seed.ts",
+    "test:connection": "ts-node src/scripts/test-connection.ts"
   },
   "dependencies": {
     "cors": "2.8.5",
     "dotenv": "17.2.2",
     "express": "5.1.0",
     "helmet": "8.1.0",
-    "mongoose": "8.18.1",
-    "socket.io": "4.8.1"
+    "socket.io": "4.8.1",
+    "@prisma/client": "^5.7.0"
   },
   "devDependencies": {
     "@types/cors": "2.8.19",
@@ -25,6 +31,7 @@
     "rimraf": "6.0.1",
     "standard": "17.1.2",
     "ts-node-dev": "2.0.0",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "prisma": "^5.7.0"
   }
 }

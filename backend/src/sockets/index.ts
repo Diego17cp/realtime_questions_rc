@@ -3,6 +3,7 @@ import { ClientToServerEvents, ServerToClientEvents } from "../types/socket";
 import { SystemService } from "../services/system.service";
 import { EjeService } from "../services/eje.service";
 import { PreguntaService } from "../services/pregunta.service";
+import { QuestionState } from "../types/database";
 
 type TypedSocket = Socket<ClientToServerEvents, ServerToClientEvents>;
 type TypedServer = Server<ClientToServerEvents, ServerToClientEvents>;
@@ -33,7 +34,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 					const stats = await PreguntaService.getStats();
 					socket.emit("server:statsUpdate", stats);
 					const pendingQuestions = await PreguntaService.findByEstado(
-						"registrada"
+						QuestionState.registrada
 					);
 					socket.emit("server:pendingQuestions", pendingQuestions);
 				} catch (error) {
@@ -42,8 +43,8 @@ const registerSocketHandlers = (io: TypedServer) => {
 			}
 			if (room === "presentation") {
 				try {
-					const acceptedQuestions = await PreguntaService.findByEstado("aceptada");
-					const answeredQuestions = await PreguntaService.findByEstado("respondida");
+					const acceptedQuestions = await PreguntaService.findByEstado(QuestionState.aceptada);
+					const answeredQuestions = await PreguntaService.findByEstado(QuestionState.respondida);
 					socket.emit("server:acceptedQuestions", acceptedQuestions);
 					socket.emit("server:answeredQuestions", answeredQuestions);
 				} catch (error) {
@@ -80,10 +81,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 					});
 					return;
 				}
-				const newQuestion = await PreguntaService.create(texto, {
-					_id: eje._id!,
-					nombre: eje.nombre,
-				});
+				const newQuestion = await PreguntaService.create(texto, ejeId);
 				io.to("moderators").emit("server:newQuestion", newQuestion);
 				await broadcastStats(io);
 				console.log("Nueva pregunta recibida:", newQuestion);
@@ -142,7 +140,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 					});
 					return;
 				}
-				const updatedQuestion = await PreguntaService.updateEstado(selectedQuestion._id!.toString(), "respondida");
+				const updatedQuestion = await PreguntaService.updateEstado(selectedQuestion.id, "respondida");
 
 				if (!updatedQuestion) {
 					io.to("presentation").emit("server:selectingRandomQuestion", { loading: false });

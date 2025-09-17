@@ -1,10 +1,16 @@
-import { Eje } from "../models/eje.model";
+import { EjeRepository } from "../repositories/eje.repository";
+import { transformEjesArrayForFrontend, transformEjeForFrontend } from "../helpers/transformers";
 
 export class EjeService {
+    private static ejeRepository = new EjeRepository();
+
     static async findAll() {
-        return await Eje.find().sort({ nombre: 1 });
+        const ejes = await this.ejeRepository.findAll();
+        return transformEjesArrayForFrontend(ejes);
     }
+    
     static async findById(id: string) {
-        return await Eje.findById(id);
+        const eje = await this.ejeRepository.findById(id);
+        return eje ? transformEjeForFrontend(eje) : null;
     }
 }

@@ -1,21 +1,15 @@
-import { Types } from "mongoose";
+import { Eje, Pregunta, QuestionState } from "@prisma/client";
 
-export type QuestionState = "registrada" | "aceptada" | "rechazada" | "respondida";
+export { QuestionState };
 
-export interface IEje {
-    _id?: Types.ObjectId
-    nombre: string
-}
-export interface IPregunta {
-    _id?: Types.ObjectId
-    texto: string
-    eje: IEje
-    estado: QuestionState
-    createdAt?: Date
-}
+export type IEje = Eje;
+
+export type IPregunta = Pregunta & {
+    eje: Eje;
+};
 
 // Operations
 export interface IPreguntaCreate {
-    texto: string
-    ejeId: Types.ObjectId
+    texto: string;
+    ejeId: string;
 }

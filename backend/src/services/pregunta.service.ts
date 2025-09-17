@@ -1,30 +1,57 @@
-import { Types } from "mongoose";
-import { Pregunta } from "../models/pregunta.model";
 import { QuestionState } from "../types/database";
+import { PreguntaRepository } from "../repositories/pregunta.repository";
+import { EjeRepository } from "../repositories/eje.repository";
+import { DatabaseConnection } from "../config/database";
+import { transformPreguntaForFrontend, transformPreguntasArrayForFrontend } from "../helpers/transformers";
 
 export class PreguntaService {
-    static async create(texto: string, eje: { _id: Types.ObjectId, nombre: string }) {
-        return await Pregunta.createWithEje({ texto, ejeId: eje._id }, eje);
+    private static preguntaRepository = new PreguntaRepository();
+    private static ejeRepository = new EjeRepository();
+    private static db = DatabaseConnection.getInstance().getClient();
+
+    static async create(texto: string, ejeId: string) {
+        const eje = await this.ejeRepository.findById(ejeId);
+        if (!eje) {
+            throw new Error("Eje no encontrado");
+        }
+        const pregunta = await this.preguntaRepository.create({ texto, ejeId });
+        return transformPreguntaForFrontend(pregunta);
     }
+
     static async updateEstado(id: string, estado: QuestionState) {
-        return await Pregunta.updateEstado(id, estado);
+        const pregunta = await this.preguntaRepository.updateEstado(id, estado);
+        return pregunta ? transformPreguntaForFrontend(pregunta) : null;
     }
+
     static async findByEstado(estado: QuestionState) {
-        return await Pregunta.findByEstado(estado);
+        const preguntas = await this.preguntaRepository.findByEstado(estado);
+        return transformPreguntasArrayForFrontend(preguntas);
     }
+
     static async findAceptadas() {
-        return await Pregunta.findAceptadas();
+        const preguntas = await this.preguntaRepository.findAceptadas();
+        return transformPreguntasArrayForFrontend(preguntas);
     }
+
     static async getRandomAceptada() {
-        return await Pregunta.getRandomAceptada();
+        const pregunta = await this.preguntaRepository.getRandomAceptada();
+        return pregunta ? transformPreguntaForFrontend(pregunta) : null;
     }
+
     static async getStats() {
         const [registradas, aceptadas, rechazadas, respondidas] = await Promise.all([
-            Pregunta.countDocuments({ estado: "registrada" }),
-            Pregunta.countDocuments({ estado: "aceptada" }),
-            Pregunta.countDocuments({ estado: "rechazada" }),
-            Pregunta.countDocuments({ estado: "respondida" }),
-        ])
-        return { nuevas: registradas, aceptadas, rechazadas, respondidas, total: registradas + aceptadas + rechazadas + respondidas };
+            this.db.pregunta.count({ where: { estado: QuestionState.registrada } }),
+            this.db.pregunta.count({ where: { estado: QuestionState.aceptada } }),
+            this.db.pregunta.count({ where: { estado: QuestionState.rechazada } }),
+            this.db.pregunta.count({ where: { estado: QuestionState.respondida } }),
+        ]);
+        
+        return { 
+            nuevas: registradas, 
+            aceptadas, 
+            rechazadas, 
+            respondidas, 
+            total: registradas + aceptadas + rechazadas + respondidas 
+        };
     }
 }

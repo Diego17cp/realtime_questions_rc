@@ -1,62 +1,54 @@
-import mongoose from "mongoose";
+import { PrismaClient } from "@prisma/client";
 
 export class DatabaseConnection {
 	private static instance: DatabaseConnection;
+	private prisma: PrismaClient;
 	private isConnected: boolean = false;
 
-	private constructor() {}
+	private constructor() {
+		this.prisma = new PrismaClient({
+			log: ['query', 'info', 'warn', 'error'],
+		});
+	}
     
 	public static getInstance(): DatabaseConnection {
 		if (!DatabaseConnection.instance)
 			DatabaseConnection.instance = new DatabaseConnection();
 		return DatabaseConnection.instance;
 	}
+
 	public async connect(): Promise<void> {
 		if (this.isConnected) return;
 		try {
-			const connectionUri = process.env.MONGODB_URI;
-			await mongoose.connect(connectionUri!);
+			await this.prisma.$connect();
 			this.isConnected = true;
-			console.log("Connected to MongoDB");
-			this.setupConnectionEvents();
+			console.log("Connected to PostgreSQL");
 		} catch (error) {
-			console.error("Error connecting to MongoDB:", error);
+			console.error("Error connecting to PostgreSQL:", error);
 			throw error;
 		}
 	}
+
 	public async disconnect(): Promise<void> {
 		if (!this.isConnected) return;
 		try {
-			await mongoose.disconnect();
+			await this.prisma.$disconnect();
 			this.isConnected = false;
-			console.log("Disconnected from MongoDB");
+			console.log("Disconnected from PostgreSQL");
 		} catch (error) {
-			console.error("Error disconnecting from MongoDB:", error);
+			console.error("Error disconnecting from PostgreSQL:", error);
 			throw error;
 		}
 	}
-	public getConnection(): mongoose.Connection {
-		return mongoose.connection;
+
+	public getClient(): PrismaClient {
+		return this.prisma;
 	}
+
 	public getStatus() {
-		const conn = mongoose.connection
 		return {
-			readyState: conn.readyState,
-			host: conn.host,
-			name: conn.name,
-		}
-	}
-	private setupConnectionEvents(): void {
-		mongoose.connection.on("error", (err) => {
-			console.error("MongoDB connection error:", err);
-		});
-		mongoose.connection.on("disconnected", () => {
-			console.warn("MongoDB disconnected. Attempting to reconnect...");
-			this.isConnected = false;
-		});
-		mongoose.connection.on("reconnected", () => {
-			console.log("MongoDB reconnected");
-			this.isConnected = true;
-		});
+			connected: this.isConnected,
+			provider: "postgresql",
+		};
 	}
 }

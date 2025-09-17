@@ -12,11 +12,11 @@ const server = http.createServer(app);
 const io = new IOServer(server, {
 	cors: { origin: process.env.FRONTEND_URL || "http://localhost:4321" },
 	pingTimeout: 60000,
-    pingInterval: 25000,
-    upgradeTimeout: 30000,
-    maxHttpBufferSize: 1e6,
-    allowEIO3: true,
-    transports: ['websocket', 'polling'],
+	pingInterval: 25000,
+	upgradeTimeout: 30000,
+	maxHttpBufferSize: 1e6,
+	allowEIO3: true,
+	transports: ["websocket", "polling"],
 });
 
 async function start() {
