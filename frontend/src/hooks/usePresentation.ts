@@ -34,7 +34,14 @@ export const usePresentation = () => {
             });
 
             socket.current.on("server:questionAccepted", (question: Question) => {
-                setAcceptedQuestions((prevQuestions) => [question, ...prevQuestions]);
+                setAcceptedQuestions((prevQuestions) => {
+                    // Evitar duplicados
+                    const exists = prevQuestions.some(q => q._id === question._id);
+                    if (exists) {
+                        return prevQuestions.map(q => q._id === question._id ? question : q);
+                    }
+                    return [question, ...prevQuestions];
+                });
             });
 
             socket.current.on("server:questionAnswered", (question: Question) => {
@@ -62,6 +69,18 @@ export const usePresentation = () => {
 
             socket.current.on("connect", () => {
                 setIsLoading(false);
+                console.log("Presentación conectada al servidor");
+            });
+
+            socket.current.on("disconnect", () => {
+                console.log("Presentación desconectada del servidor");
+                setIsLoading(true);
+            });
+
+            socket.current.on("reconnect", () => {
+                console.log("Presentación reconectada al servidor");
+                // Re-sincronizar datos después de reconexión
+                socket.current?.emit("client:joinRoom", "presentation");
             });
         }
 

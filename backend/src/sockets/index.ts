@@ -63,6 +63,18 @@ const registerSocketHandlers = (io: TypedServer) => {
 				});
 			}
 		});
+
+		socket.on("client:getPendingQuestions", async () => {
+			try {
+				const pendingQuestions = await PreguntaService.findByEstado(QuestionState.registrada);
+				socket.emit("server:pendingQuestions", pendingQuestions);
+			} catch (error) {
+				console.error("Error fetching pending questions:", error);
+				socket.emit("server:error", {
+					message: "Error al obtener preguntas pendientes",
+				});
+			}
+		});
 		socket.on("client:getFormStatus", () => {
 			socket.emit("server:formStatusChanged", SystemService.getFormStatus());
 		});
@@ -102,7 +114,8 @@ const registerSocketHandlers = (io: TypedServer) => {
 					});
 					return;
 				}
-                socket.emit("server:questionUpdated", updatedQuestion);
+                // Emitir a todos los moderadores, no solo al que hizo la petición
+				io.to("moderators").emit("server:questionUpdated", updatedQuestion);
 				if (estado === "aceptada") {
 					io.to("presentation").emit("server:questionAccepted", updatedQuestion);
 				}

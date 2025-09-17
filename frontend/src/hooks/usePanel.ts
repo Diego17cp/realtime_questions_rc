@@ -73,9 +73,27 @@ export const usePanel = () => {
 			socket.current.on("server:statsUpdate", (newStats: Stats) => {
 				setStats(newStats);
 				setIsLoading(false);
+				// Re-sincronizar preguntas pendientes cuando se actualizan las estadísticas
+				if (socket.current) {
+					socket.current.emit("client:getPendingQuestions");
+				}
 			});
 			socket.current.on("connect", () => {
 				setIsLoading(false);
+				console.log("Panel conectado al servidor");
+			});
+
+			socket.current.on("disconnect", () => {
+				console.log("Panel desconectado del servidor");
+				setIsLoading(true);
+			});
+
+			socket.current.on("reconnect", () => {
+				console.log("Panel reconectado al servidor");
+				// Re-sincronizar datos después de reconexión
+				socket.current?.emit("client:joinRoom", "moderators");
+				socket.current?.emit("client:getFormStatus");
+				socket.current?.emit("client:getStats");
 			});
 			socket.current.on(
 				"server:pendingQuestions",
@@ -86,11 +104,16 @@ export const usePanel = () => {
 			socket.current.on(
 				"server:questionUpdated",
 				(updatedQuestion: Question) => {
-					setQuestions((prevQuestions) =>
-						prevQuestions.map((q) =>
+					setQuestions((prevQuestions) => {
+						// Si la pregunta ya no está en estado "registrada", la eliminamos de la lista
+						if (updatedQuestion.estado !== "registrada") {
+							return prevQuestions.filter((q) => q._id !== updatedQuestion._id);
+						}
+						// Si sigue siendo "registrada", la actualizamos
+						return prevQuestions.map((q) =>
 							q._id === updatedQuestion._id ? updatedQuestion : q
-						)
-					);
+						);
+					});
 				}
 			);
 		}
