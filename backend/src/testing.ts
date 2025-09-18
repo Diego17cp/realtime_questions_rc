@@ -2,10 +2,11 @@ import express from "express"
 import cors from "cors"
 import helmet from "helmet"
 import dotenv from "dotenv"
-import http from "http"
+import http from "node:http"
 import { DatabaseConnection } from "./config/database"
-import { Eje } from "./models/eje.model"
-import { Pregunta } from "./models/pregunta.model"
+import { EjeService } from "./services/eje.service"
+import { PreguntaService } from "./services/pregunta.service"
+import type { QuestionState } from "./types/database"
 
 dotenv.config()
 
@@ -29,22 +30,10 @@ app.get("/", (_, res) => {
 // Ruta para crear ejes hardcodeados
 app.post("/test/crear-ejes", async (_, res) => {
     try {
-        const ejesHardcodeados = [
-            { nombre: "Transparencia y Rendición de Cuentas" },
-            { nombre: "Gestión Financiera" },
-            { nombre: "Participación Ciudadana" },
-            { nombre: "Desarrollo Social" },
-            { nombre: "Infraestructura y Servicios Públicos" }
-        ]
-
-        // Limpiar ejes existentes (solo para pruebas)
-        await Eje.deleteMany({})
-        
-        const ejesCreados = await Eje.insertMany(ejesHardcodeados)
-        
-        res.json({
-            message: "Ejes creados exitosamente",
-            ejes: ejesCreados
+        // Note: This would need to be implemented in the service/repository layer
+        // For now, this is a placeholder since we don't have create methods in EjeService
+        res.status(501).json({ 
+            error: "Create functionality not implemented in EjeService yet" 
         })
     } catch (error) {
         console.error("Error creando ejes:", error)
@@ -55,28 +44,24 @@ app.post("/test/crear-ejes", async (_, res) => {
 // Ruta para crear pregunta hardcodeada
 app.post("/test/crear-pregunta", async (_, res) => {
     try {
-        // Obtener el primer eje disponible
-        const primerEje = await Eje.findOne()
+        // Obtener todos los ejes disponibles
+        const ejes = await EjeService.findAll()
         
-        if (!primerEje) {
+        if (!ejes || ejes.length === 0) {
             return res.status(400).json({ 
                 error: "No hay ejes disponibles. Ejecuta primero /test/crear-ejes" 
             })
         }
 
-        const preguntaHardcodeada = {
-            texto: "¿Cuáles fueron los principales logros en transparencia durante este período?",
-            ejeId: primerEje._id!
+        const primerEje = ejes[0]
+        if (!primerEje) {
+            return res.status(400).json({ 
+                error: "No se pudo obtener el primer eje" 
+            })
         }
 
-        // Usar el método estático del modelo
-        const preguntaCreada = await Pregunta.createWithEje(
-            preguntaHardcodeada,
-            {
-                _id: primerEje._id!,
-                nombre: primerEje.nombre
-            }
-        )
+        const texto = "¿Cuáles fueron los principales logros en transparencia durante este período?"
+        const preguntaCreada = await PreguntaService.create(texto, primerEje.id)
 
         return res.json({
             message: "Pregunta creada exitosamente",
@@ -91,10 +76,19 @@ app.post("/test/crear-pregunta", async (_, res) => {
 // Ruta para obtener todas las preguntas (verificar)
 app.get("/test/preguntas", async (_, res) => {
     try {
-        const preguntas = await Pregunta.find().sort({ createdAt: -1 })
+        const stats = await PreguntaService.getStats()
+        // Get questions from different states
+        const registradas = await PreguntaService.findByEstado("registrada")
+        const aceptadas = await PreguntaService.findByEstado("aceptada")
+        const rechazadas = await PreguntaService.findByEstado("rechazada")
+        const respondidas = await PreguntaService.findByEstado("respondida")
+        
+        const todasLasPreguntas = [...registradas, ...aceptadas, ...rechazadas, ...respondidas]
+        
         res.json({
-            total: preguntas.length,
-            preguntas
+            total: stats.total,
+            stats,
+            preguntas: todasLasPreguntas
         })
     } catch (error) {
         console.error("Error obteniendo preguntas:", error)
@@ -103,7 +97,7 @@ app.get("/test/preguntas", async (_, res) => {
 })
 app.get("/test/ejes", async (_, res) => {
     try {
-        const ejes = await Eje.find().sort({ nombre: 1 })
+        const ejes = await EjeService.findAll()
         res.json({
             total: ejes.length,
             ejes
@@ -119,7 +113,7 @@ app.patch("/test/pregunta/:id/estado/:nuevoEstado", async (req, res) => {
     try {
         const { id, nuevoEstado } = req.params
         
-        const preguntaActualizada = await Pregunta.updateEstado(id, nuevoEstado as any)
+        const preguntaActualizada = await PreguntaService.updateEstado(id, nuevoEstado as QuestionState)
         
         if (!preguntaActualizada) {
             return res.status(404).json({ error: "Pregunta no encontrada" })

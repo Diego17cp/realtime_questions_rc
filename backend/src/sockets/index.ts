@@ -1,5 +1,8 @@
-import { Server, Socket } from "socket.io";
-import { ClientToServerEvents, ServerToClientEvents } from "../types/socket";
+import type { Server, Socket } from "socket.io";
+import type {
+	ClientToServerEvents,
+	ServerToClientEvents,
+} from "../types/socket";
 import { SystemService } from "../services/system.service";
 import { EjeService } from "../services/eje.service";
 import { PreguntaService } from "../services/pregunta.service";
@@ -25,16 +28,14 @@ const registerSocketHandlers = (io: TypedServer) => {
 			console.log(`Socket ${socket.id} joined room: ${room}`);
 
 			if (room === "users")
-				socket.emit(
-					"server:formStatusChanged",
-					SystemService.getFormStatus()
-				);
+				socket.emit("server:initialFormStatus", SystemService.getFormStatus());
+				// socket.emit("server:formStatusChanged", SystemService.getFormStatus());
 			if (room === "moderators") {
 				try {
 					const stats = await PreguntaService.getStats();
 					socket.emit("server:statsUpdate", stats);
 					const pendingQuestions = await PreguntaService.findByEstado(
-						QuestionState.registrada
+						QuestionState.registrada,
 					);
 					socket.emit("server:pendingQuestions", pendingQuestions);
 				} catch (error) {
@@ -43,8 +44,12 @@ const registerSocketHandlers = (io: TypedServer) => {
 			}
 			if (room === "presentation") {
 				try {
-					const acceptedQuestions = await PreguntaService.findByEstado(QuestionState.aceptada);
-					const answeredQuestions = await PreguntaService.findByEstado(QuestionState.respondida);
+					const acceptedQuestions = await PreguntaService.findByEstado(
+						QuestionState.aceptada,
+					);
+					const answeredQuestions = await PreguntaService.findByEstado(
+						QuestionState.respondida,
+					);
 					socket.emit("server:acceptedQuestions", acceptedQuestions);
 					socket.emit("server:answeredQuestions", answeredQuestions);
 				} catch (error) {
@@ -66,7 +71,9 @@ const registerSocketHandlers = (io: TypedServer) => {
 
 		socket.on("client:getPendingQuestions", async () => {
 			try {
-				const pendingQuestions = await PreguntaService.findByEstado(QuestionState.registrada);
+				const pendingQuestions = await PreguntaService.findByEstado(
+					QuestionState.registrada,
+				);
 				socket.emit("server:pendingQuestions", pendingQuestions);
 			} catch (error) {
 				console.error("Error fetching pending questions:", error);
@@ -76,7 +83,7 @@ const registerSocketHandlers = (io: TypedServer) => {
 			}
 		});
 		socket.on("client:getFormStatus", () => {
-			socket.emit("server:formStatusChanged", SystemService.getFormStatus());
+			socket.emit("server:initialFormStatus", SystemService.getFormStatus());
 		});
 		socket.on("client:submitQuestion", async ({ texto, ejeId }) => {
 			try {
@@ -114,10 +121,13 @@ const registerSocketHandlers = (io: TypedServer) => {
 					});
 					return;
 				}
-                // Emitir a todos los moderadores, no solo al que hizo la petición
+				// Emitir a todos los moderadores, no solo al que hizo la petición
 				io.to("moderators").emit("server:questionUpdated", updatedQuestion);
 				if (estado === "aceptada") {
-					io.to("presentation").emit("server:questionAccepted", updatedQuestion);
+					io.to("presentation").emit(
+						"server:questionAccepted",
+						updatedQuestion,
+					);
 				}
 				await broadcastStats(io);
 				console.log("Pregunta actualizada:", updatedQuestion);
@@ -145,19 +155,28 @@ const registerSocketHandlers = (io: TypedServer) => {
 		// Presentation
 		socket.on("client:selectRandomQuestion", async () => {
 			try {
-				io.to("presentation").emit("server:selectingRandomQuestion", { loading: true });
+				io.to("presentation").emit("server:selectingRandomQuestion", {
+					loading: true,
+				});
 				const selectedQuestion = await PreguntaService.getRandomAceptada();
 				if (!selectedQuestion) {
-					io.to("presentation").emit("server:selectingRandomQuestion", { loading: false });
+					io.to("presentation").emit("server:selectingRandomQuestion", {
+						loading: false,
+					});
 					socket.emit("server:error", {
 						message: "No hay preguntas aceptadas disponibles.",
 					});
 					return;
 				}
-				const updatedQuestion = await PreguntaService.updateEstado(selectedQuestion.id, "respondida");
+				const updatedQuestion = await PreguntaService.updateEstado(
+					selectedQuestion.id,
+					"respondida",
+				);
 
 				if (!updatedQuestion) {
-					io.to("presentation").emit("server:selectingRandomQuestion", { loading: false });
+					io.to("presentation").emit("server:selectingRandomQuestion", {
+						loading: false,
+					});
 					socket.emit("server:error", {
 						message: "Error al actualizar la pregunta.",
 					});
