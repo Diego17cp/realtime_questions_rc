@@ -21,10 +21,10 @@ export const EmptyAcceptedsPresentation = () => {
 				</span>
 			</motion.div>
 			<p className="text-white/60 font-medium mb-2">
-				No hay preguntas aprobadas
+				No hay preguntas
 			</p>
 			<p className="text-white/40 text-sm">
-				Las preguntas aprobadas aparecerán aquí
+				Las preguntas aparecerán aquí
 			</p>
 		</motion.div>
 	);

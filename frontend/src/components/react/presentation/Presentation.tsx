@@ -68,7 +68,7 @@ export const PresentationView = () => {
 						<div className="px-6 py-4 border-b border-white/20 bg-white/5">
 							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 								<h2 className="text-xl font-semibold text-white">
-									Preguntas Aprobadas
+									Preguntas
 								</h2>
 								<div className="flex items-center gap-2 text-sm text-white/70">
 									<motion.div
