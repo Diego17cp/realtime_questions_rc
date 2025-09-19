@@ -54,12 +54,10 @@ export class PreguntaRepository {
 		if (aceptadas.length === 0) return null;
 		
 		const ejeCount = new Map<string, number>();
-		const ejeNames = new Map<string, string>();
 
 		aceptadas.forEach((pregunta) => {
 			const ejeId = pregunta.ejeId;
 			ejeCount.set(ejeId, (ejeCount.get(ejeId) || 0) + 1);
-			ejeNames.set(ejeId, pregunta.eje.nombre);
 		});
 
 		// Crear pesos usando raíz cuadrada (más balanceado)
