@@ -34,7 +34,10 @@ export class PreguntaService {
     }
 
     static async getRandomAceptada() {
-        const pregunta = await this.preguntaRepository.getRandomAceptada();
+        console.log("🔍 Seleccionando pregunta aleatoria aceptada...");
+        const pregunta = await this.preguntaRepository.getRandomAceptadaWeighted();
+        if (pregunta) console.log("✅ Pregunta seleccionada:", pregunta.id);
+        else console.log("❌ No se pudo seleccionar una pregunta");
         return pregunta ? transformPreguntaForFrontend(pregunta) : null;
     }
 
