@@ -35,7 +35,7 @@ export const Form = () => {
 				>
 					<label
 						htmlFor="eje"
-						className="block text-sm font-semibold text-gray-700 mb-2"
+						className="block text-sm font-semibold text-gray-700 mb-2 font-body"
 					>
 						Selecciona el Eje:
 					</label>
@@ -68,7 +68,7 @@ export const Form = () => {
 				>
 					<label
 						htmlFor="pregunta"
-						className="block text-sm font-semibold text-gray-700 mb-2"
+						className="block text-sm font-semibold text-gray-700 mb-2 font-body"
 					>
 						Escribe tu pregunta:
 					</label>
@@ -122,12 +122,12 @@ export const Form = () => {
 								<>
 									{formEnabled ? (
 										<>
-											<span>Enviar Pregunta</span>
+											<span className="font-body">Enviar Pregunta</span>
 											<GrSend size={20} />
 										</>
 									) : (
 										<>
-											<span>
+											<span className="font-body">
 												Formulario Deshabilitado
 											</span>
 											<TbFaceIdError size={20} />

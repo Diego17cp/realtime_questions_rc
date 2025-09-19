@@ -11,7 +11,7 @@ export const PanelStats = ({ nuevas = 0, aceptadas = 0, rechazadas = 0 }: Props)
 	return (
 		<aside className="xl:col-span-1 space-y-6">
 			<div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-				<h2 className="text-lg font-semibold text-gray-900 mb-6">
+				<h2 className="text-lg font-semibold text-gray-900 mb-6 font-body">
 					Estadísticas
 				</h2>
 
@@ -19,7 +19,7 @@ export const PanelStats = ({ nuevas = 0, aceptadas = 0, rechazadas = 0 }: Props)
 					<div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-blue-600 font-medium">
+								<p className="text-sm text-blue-600 font-medium font-body">
 									Nuevas
 								</p>
 								<p className="text-2xl font-bold text-blue-900">
@@ -37,7 +37,7 @@ export const PanelStats = ({ nuevas = 0, aceptadas = 0, rechazadas = 0 }: Props)
 					<div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-green-600 font-medium">
+								<p className="text-sm text-green-600 font-medium font-body">
 									Aceptadas
 								</p>
 								<p className="text-2xl font-bold text-green-900">
@@ -55,7 +55,7 @@ export const PanelStats = ({ nuevas = 0, aceptadas = 0, rechazadas = 0 }: Props)
 					<div className="bg-gradient-to-r from-red-50 to-pink-50 rounded-xl p-4">
 						<div className="flex items-center justify-between">
 							<div>
-								<p className="text-sm text-red-600 font-medium">
+								<p className="text-sm text-red-600 font-medium font-body">
 									Rechazadas
 								</p>
 								<p className="text-2xl font-bold text-red-900">
