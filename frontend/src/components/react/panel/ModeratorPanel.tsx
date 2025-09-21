@@ -36,7 +36,7 @@ export const ModeratorPanel = () => {
 					<div className="flex flex-col sm:flex-row! items-start sm:items-center! gap-4">
 						<button
 							onClick={toggleFormStatus}
-							className={`cursor-pointer transition-all hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
+							className={`cursor-pointer font-body transition-all hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px]
 							active:border-b-[2px] active:brightness-90 active:translate-y-[2px] flex items-center justify-center gap-3 md:gap-2! shadow-lg 
 							${
 								formEnabled
@@ -77,12 +77,12 @@ export const ModeratorPanel = () => {
 					<div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
 						<header className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
 							<div className="flex flex-col sm:flex-row! sm:items-center! sm:justify-between! gap-4">
-								<h2 className="text-xl font-semibold text-gray-900">
+								<h2 className="text-xl font-semibold text-gray-900 font-body">
 									Preguntas Pendientes
 								</h2>
 								<div className="flex items-center gap-2 text-sm text-gray-500">
 									<div className="size-2 bg-green-400 rounded-full animate-pulse"></div>
-									<span>Actualizándose en tiempo real</span>
+									<span className="font-body">Actualizándose en tiempo real</span>
 								</div>
 							</div>
 						</header>

@@ -13,10 +13,10 @@ export const EmptyQuestionPanel = () => {
 					<TbMessageFilled />
 				</span>
 			</div>
-			<p className="text-gray-600 font-medium mb-2">
+			<p className="text-gray-600 font-medium mb-2 font-body">
 				Las preguntas aceptadas aparecerán en la sala de presentación
 			</p>
-			<p className="text-sm text-gray-500">
+			<p className="text-sm text-gray-500 font-body">
 				Usa los botones de acción para moderar el contenido
 			</p>
 		</motion.div>

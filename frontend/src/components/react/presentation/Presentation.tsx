@@ -2,7 +2,7 @@ import { LuRefreshCcw } from "react-icons/lu";
 import { usePresentation } from "../../../hooks/usePresentation";
 import { motion, AnimatePresence } from "motion/react";
 import { useEffect, useState } from "react";
-import  confetti  from "canvas-confetti"
+import confetti from "canvas-confetti";
 import { AcceptedQuestion } from "./AcceptedQuestion";
 import { AnsweredQuestion } from "./AnsweredQuestion";
 import { EmptyAcceptedsPresentation } from "../empty/EmptyAcceptedsPresentation";
@@ -28,7 +28,7 @@ export const PresentationView = () => {
 
 	const handleRandomSelection = () => {
 		selectRandomQuestion();
-		confetti()
+		confetti();
 	};
 
 	const handleCloseModal = () => {
@@ -45,7 +45,9 @@ export const PresentationView = () => {
 			>
 				<div className="text-center">
 					<div className="size-12 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-					<p className="text-white/70">Cargando preguntas...</p>
+					<p className="text-white/70 font-body">
+						Cargando preguntas...
+					</p>
 				</div>
 			</motion.div>
 		);
@@ -69,7 +71,7 @@ export const PresentationView = () => {
 					>
 						<div className="px-6 py-4 border-b border-white/20 bg-white/5">
 							<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-								<h2 className="text-xl font-semibold text-white">
+								<h2 className="text-xl font-semibold text-white font-titles">
 									Preguntas
 								</h2>
 								<div className="flex items-center gap-2 text-sm text-white/70">
@@ -82,8 +84,8 @@ export const PresentationView = () => {
 										className="size-2 bg-green-400 rounded-full"
 									/>
 									<span>
-										{acceptedQuestions.length} preguntas
-										disponibles
+										{acceptedQuestions.length}
+										<span className="font-body">{" "}preguntas disponibles</span>
 									</span>
 								</div>
 							</div>
@@ -115,8 +117,11 @@ export const PresentationView = () => {
 						<div className="flex flex-col sm:flex-row items-center justify-center gap-4">
 							<button
 								onClick={handleRandomSelection}
-								disabled={ isSelectingRandom || acceptedQuestions.length === 0 }
-								className={`cursor-pointer transition-all hover:brightness-110 hover:-translate-y-[1px] 
+								disabled={
+									isSelectingRandom ||
+									acceptedQuestions.length === 0
+								}
+								className={`cursor-pointer font-body transition-all hover:brightness-110 hover:-translate-y-[1px] 
                                 hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] flex
                                 items-center justify-center gap-3 md:gap-2! shadow-lg text-white w-auto px-6 py-6 rounded-lg
                                 bg-primary border-secondary border-b-[4px] disabled:opacity-50 disabled:cursor-not-allowed`}
@@ -167,7 +172,7 @@ export const PresentationView = () => {
 							transition={{ delay: 0.5 }}
 							className="flex items-center justify-between mb-6"
 						>
-							<h3 className="text-xl font-semibold text-white">
+							<h3 className="text-xl font-semibold text-white font-titles">
 								Preguntas Respondidas
 							</h3>
 							<motion.div

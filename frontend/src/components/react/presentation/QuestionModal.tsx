@@ -44,7 +44,7 @@ export const QuestionModal = ({ selectedQuestion, onClose }: Props) => {
 						className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full mb-4"
 					>
 						<div className="size-3 bg-primary rounded-full animate-pulse"></div>
-						<span className="text-primary font-bold text-sm">
+						<span className="text-primary font-bold text-sm font-titles">
 							PREGUNTA SELECCIONADA
 						</span>
 					</motion.div>
@@ -53,7 +53,7 @@ export const QuestionModal = ({ selectedQuestion, onClose }: Props) => {
 						initial={{ opacity: 0, scale: 0.8 }}
 						animate={{ opacity: 1, scale: 1 }}
 						transition={{ delay: 0.2 }}
-						className={`inline-flex ml-3 items-center px-3 py-1.5 rounded-full text-sm font-medium ${getRandomBadgeColor()}`}
+						className={`inline-flex font-body ml-3 items-center px-3 py-1.5 rounded-full text-sm font-medium ${getRandomBadgeColor()}`}
 					>
 						{selectedQuestion.eje.nombre}
 					</motion.span>
@@ -66,7 +66,7 @@ export const QuestionModal = ({ selectedQuestion, onClose }: Props) => {
 					transition={{ delay: 0.3 }}
 					className="text-center mb-8"
 				>
-					<h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4">
+					<h2 className="text-2xl lg:text-3xl font-bold text-gray-900 leading-tight mb-4 font-body">
 						{selectedQuestion.texto}
 					</h2>
 					<p className="text-gray-600 font-medium">
@@ -84,7 +84,7 @@ export const QuestionModal = ({ selectedQuestion, onClose }: Props) => {
 						className="cursor-pointer transition-all hover:brightness-110 hover:-translate-y-[1px] 
                                 hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px] flex
                                 items-center justify-center gap-3 md:gap-2! shadow-lg text-white px-5 py-4 rounded-lg
-                                bg-primary border-secondary border-b-[4px] disabled:opacity-50 disabled:cursor-not-allowed"
+                                bg-primary border-secondary border-b-[4px] disabled:opacity-50 disabled:cursor-not-allowed font-body"
 					>
                         <PiSealCheckLight size={25} />
 						<span className="text-xl">Cerrar</span>

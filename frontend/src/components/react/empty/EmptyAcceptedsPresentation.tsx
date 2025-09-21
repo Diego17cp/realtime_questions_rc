@@ -20,10 +20,10 @@ export const EmptyAcceptedsPresentation = () => {
 					<BiMessageError />
 				</span>
 			</motion.div>
-			<p className="text-white/60 font-medium mb-2">
+			<p className="text-white/60 font-medium mb-2 font-body">
 				No hay preguntas
 			</p>
-			<p className="text-white/40 text-sm">
+			<p className="text-white/40 text-sm font-body">
 				Las preguntas aparecerán aquí
 			</p>
 		</motion.div>
