@@ -11,6 +11,7 @@ interface Eje {
 
 export const useForm = () => {
     const API_URL = import.meta.env.PUBLIC_API_URL
+    const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL
     const socket = useRef<Socket | null>(null)
 
     const [ejes, setEjes] = useState<Eje[]>([])
@@ -27,7 +28,13 @@ export const useForm = () => {
 
     useEffect(() => {
         if (!socket.current) {
-            socket.current = io(API_URL)
+            // For dev without proxy
+            // socket.current = io(API_URL)
+            // For prod. add path to redirect to backend
+            socket.current = io(SOCKET_URL, {
+                path: "/api/socket.io",
+                transports: ["websocket", "polling"],
+            })
             socket.current.emit("client:joinRoom", "users")
             socket.current.on("server:error", (data: { message: string }) => {
                 toast.error("Error", { description: data.message || "Inténtalo de nuevo más tarde." })

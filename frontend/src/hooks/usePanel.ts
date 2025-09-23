@@ -16,8 +16,8 @@ export interface Question {
 }
 export const usePanel = () => {
 	const API_URL = import.meta.env.PUBLIC_API_URL;
+	const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL
 	const socket = useRef<Socket | null>(null);
-
 	interface Stats {
 		nuevas: number;
 		aceptadas: number;
@@ -39,7 +39,13 @@ export const usePanel = () => {
 
 	useEffect(() => {
 		if (!socket.current) {
-			socket.current = io(API_URL);
+			// For dev without proxy
+            // socket.current = io(API_URL)
+            // For prod. add path to redirect to backend
+            socket.current = io(SOCKET_URL, {
+                path: "/api/socket.io",
+                transports: ["websocket", "polling"],
+            })
 			socket.current.emit("client:joinRoom", "moderators");
 			socket.current.emit("client:getFormStatus");
 			socket.current.on("server:error", (data: { message: string }) => {

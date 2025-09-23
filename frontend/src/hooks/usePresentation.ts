@@ -5,6 +5,7 @@ import { toast } from "sonner";
 
 export const usePresentation = () => {
     const API_URL = import.meta.env.PUBLIC_API_URL;
+    const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL;
     const socket = useRef<Socket | null>(null);
 
     const [acceptedQuestions, setAcceptedQuestions] = useState<Question[]>([]);
@@ -15,7 +16,13 @@ export const usePresentation = () => {
 
     useEffect(() => {
         if (!socket.current) {
-            socket.current = io(API_URL);
+            // For dev without proxy
+            // socket.current = io()
+            // For prod. add path to redirect to backend
+            socket.current = io(SOCKET_URL, {
+                path: "/api/socket.io",
+                transports: ["websocket", "polling"],
+            })
             socket.current.emit("client:joinRoom", "presentation");
 
             socket.current.on("server:error", (data: { message: string }) => {
@@ -90,7 +97,7 @@ export const usePresentation = () => {
                 socket.current = null;
             }
         };
-    }, [API_URL]);
+    }, []);
 
     const selectRandomQuestion = () => {
         if (socket.current && acceptedQuestions.length > 0 && !isSelectingRandom) {
