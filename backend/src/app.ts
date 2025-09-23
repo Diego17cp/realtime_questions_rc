@@ -3,7 +3,6 @@ import cors from "cors";
 import helmet from "helmet";
 import { errorHandler } from "./middleware/errorHandler";
 import { validateOrigin } from "./middleware/validateOrigin";
-import { DatabaseConnection } from "./config/database";
 import { EjeService } from "./services/eje.service";
 
 const app: Application = express();
