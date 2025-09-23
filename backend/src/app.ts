@@ -49,8 +49,7 @@ app.get("/api/ejes", validateOrigin, async (_, res) => {
 // API status
 app.get("/api/status", (_, res) => {
 	res.json({
-		api: "active",
-		database: DatabaseConnection.getInstance().getStatus(),
+		status: "RUNNING",
 		timestamp: new Date().toISOString(),
 	});
 });
