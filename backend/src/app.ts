@@ -2,6 +2,7 @@ import express, { Application } from "express";
 import cors from "cors";
 import helmet from "helmet";
 import { errorHandler } from "./middleware/errorHandler";
+import { validateOrigin } from "./middleware/validateOrigin";
 import { DatabaseConnection } from "./config/database";
 import { EjeService } from "./services/eje.service";
 
@@ -30,7 +31,7 @@ app.get("/", (_, res) => {
 	});
 });
 // API for list of ejes
-app.get("/api/ejes", async (_, res) => {
+app.get("/api/ejes", validateOrigin, async (_, res) => {
 	try {
 		const ejes = await EjeService.findAll();
 		res.json({
