@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 
-export const validateOrigin = (req: Request, res: Response, next: NextFunction) => {
+export const validateOrigin = (req: Request, res: Response, next: NextFunction): Response | void => {
     const allowedOrigins = [
         "https://app-responde.munijlo.gob.pe",
         "http://localhost:4321"
@@ -104,5 +104,5 @@ export const validateOrigin = (req: Request, res: Response, next: NextFunction) 
             error: "Acceso denegado: agente sospechoso detectado"
         })
     }
-    next()
+    return next()
 }
