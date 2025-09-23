@@ -10,6 +10,8 @@ dotenv.config();
 const PORT = Number(process.env.PORT || 3000);
 const server = http.createServer(app);
 const io = new IOServer(server, {
+	// For prod. add path to redirect to backend
+	path: "/api/socket.io",
 	cors: { origin: process.env.FRONTEND_URL || "http://localhost:4321" },
 	pingTimeout: 60000,
 	pingInterval: 25000,
