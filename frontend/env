@@ -1,2 +1,5 @@
 PUBLIC_API_URL=http://localhost:3000
 PUBLIC_SOCKET_URL=http://localhost:3000
+PUBLIC_PROD_API_URL=tu-endpoint-aqui
+PUBLIC_PROD_SOCKET_URL=tu-endpoint-aqui
+PUBLIC_ENV=production
