@@ -15,8 +15,9 @@ export interface Question {
 	__v?: number;
 }
 export const usePanel = () => {
-	const API_URL = import.meta.env.PUBLIC_API_URL;
-	const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL
+	const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL;
+    const SOCKET_PROD_URL = import.meta.env.PUBLIC_PROD_SOCKET_URL;
+    const ENV = import.meta.env.PUBLIC_ENV || "production";
 	const socket = useRef<Socket | null>(null);
 	interface Stats {
 		nuevas: number;
@@ -42,7 +43,7 @@ export const usePanel = () => {
 			// For dev without proxy
             // socket.current = io(API_URL)
             // For prod. add path to redirect to backend
-            socket.current = io(SOCKET_URL, {
+            socket.current = io(ENV === "development" ? SOCKET_URL : SOCKET_PROD_URL, {
                 path: "/api/socket.io",
                 transports: ["websocket", "polling"],
             })

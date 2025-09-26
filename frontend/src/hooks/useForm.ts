@@ -11,7 +11,9 @@ interface Eje {
 
 export const useForm = () => {
     const API_URL = import.meta.env.PUBLIC_API_URL
-    const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL
+    const SOCKET_URL = import.meta.env.PUBLIC_SOCKET_URL;
+    const SOCKET_PROD_URL = import.meta.env.PUBLIC_PROD_SOCKET_URL;
+    const ENV = import.meta.env.PUBLIC_ENV || "production";
     const socket = useRef<Socket | null>(null)
 
     const [ejes, setEjes] = useState<Eje[]>([])
@@ -31,7 +33,7 @@ export const useForm = () => {
             // For dev without proxy
             // socket.current = io(API_URL)
             // For prod. add path to redirect to backend
-            socket.current = io(SOCKET_URL, {
+            socket.current = io(ENV === "development" ? SOCKET_URL : SOCKET_PROD_URL, {
                 path: "/api/socket.io",
                 transports: ["websocket", "polling"],
             })
