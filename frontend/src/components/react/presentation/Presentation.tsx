@@ -27,6 +27,7 @@ export const PresentationView = () => {
 	}, [selectedQuestion, showModal]);
 
 	const handleRandomSelection = () => {
+		setShowModal(true)
 		selectRandomQuestion();
 		confetti();
 	};
@@ -85,7 +86,10 @@ export const PresentationView = () => {
 									/>
 									<span>
 										{acceptedQuestions.length}
-										<span className="font-body">{" "}preguntas disponibles</span>
+										<span className="font-body">
+											{" "}
+											preguntas disponibles
+										</span>
 									</span>
 								</div>
 							</div>
@@ -150,8 +154,8 @@ export const PresentationView = () => {
 								</motion.span>
 								<span className="text-lg">
 									{isSelectingRandom
-										? "Seleccionando..."
-										: "Nueva Pregunta Aleatoria"}
+										? "Sorteando..."
+										: "Obtener pregunta"}
 								</span>
 							</button>
 						</div>
@@ -204,13 +208,13 @@ export const PresentationView = () => {
 					</div>
 				</motion.aside>
 			</motion.div>
-
 			{/* Modal para pregunta seleccionada */}
 			<AnimatePresence>
 				{showModal && selectedQuestion && (
 					<QuestionModal
 						selectedQuestion={selectedQuestion}
 						onClose={handleCloseModal}
+						isLoading={isSelectingRandom}
 					/>
 				)}
 			</AnimatePresence>
