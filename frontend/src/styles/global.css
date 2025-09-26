@@ -2,27 +2,29 @@
 	--primary-color: #2e8acb;
 	--secondary-color: #002f59;
 	--tertiary-color: #0dc1f2;
-    --titles: 'Kanit', sans-serif;
-    --body: 'Rosario', sans-serif;
+	--titles: 'Kanit', sans-serif;
+	--body: 'Rosario', sans-serif;
 }
+
 @import 'tailwindcss';
 
 @theme {
-    --color-primary: var(--primary-color);
-    --color-secondary: var(--secondary-color);
-    --color-tertiary: var(--tertiary-color);
-    --font-titles: var(--titles);
-    --font-body: var(--body);
+	--color-primary: var(--primary-color);
+	--color-secondary: var(--secondary-color);
+	--color-tertiary: var(--tertiary-color);
+	--font-titles: var(--titles);
+	--font-body: var(--body);
 }
+
 .scrollbar-thin::-webkit-scrollbar {
-			width: 4px;
-		}
+	width: 4px;
+}
 
-		.scrollbar-thumb-white\/20::-webkit-scrollbar-thumb {
-			background-color: rgba(255, 255, 255, 0.2);
-			border-radius: 2px;
-		}
+.scrollbar-thumb-white\/20::-webkit-scrollbar-thumb {
+	background-color: rgba(255, 255, 255, 0.2);
+	border-radius: 2px;
+}
 
-		.scrollbar-track-transparent::-webkit-scrollbar-track {
-			background: transparent;
-		}
+.scrollbar-track-transparent::-webkit-scrollbar-track {
+	background: transparent;
+}
